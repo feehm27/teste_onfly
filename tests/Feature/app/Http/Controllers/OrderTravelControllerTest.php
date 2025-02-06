@@ -71,6 +71,7 @@ class OrderTravelControllerTest extends TestCase
         return [
             'message',
             'data' => [
+                'id',
                 'name_applicant',
                 'destination',
                 'departure_date',

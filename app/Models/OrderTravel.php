@@ -12,9 +12,10 @@ class OrderTravel extends Model
 
     protected $table = 'order_travels';
 
-    protected $hidden = ['id', 'created_at', 'updated_at'];
+    protected $hidden = ['created_at', 'updated_at'];
 
     protected $fillable = [
+        'id',
         'order_travel_status_id',
         'name_applicant',
         'destination',

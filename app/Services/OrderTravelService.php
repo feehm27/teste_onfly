@@ -14,20 +14,19 @@ class OrderTravelService
 
     public function findById(int $travelId)
     {
-       return $this->travelRepository->find($travelId);
+        return $this->travelRepository->find($travelId);
     }
 
-    public function getTravelsWithFilters(array $filters)
+    public function getTravelsWithFilters(object $filters)
     {
-        if (isset($filters['travel_status_id'])) {
-            $this->travelRepository->where('travel_status_id', $filters['travel_status_id']);
-        }
+        $this->applyFilters($filters);
+        $this->travelRepository->orderBy('departure_date');
 
-        if ($filters['paginate']) {
-            return $this->travelRepository->getPaginate($filters['limit']);
+        if ($filters->paginate) {
+            return $this->travelRepository->paginate($filters->limit);
+        } else {
+            return $this->travelRepository->get();
         }
-
-        return $this->travelRepository->get();
     }
 
     public function createTravel(array $inputs)
@@ -50,5 +49,38 @@ class OrderTravelService
         return $updateSuccessful
             ? $this->travelRepository->find($orderTravelId)
             : throw new Exception('Não foi possível atualizar o status da viagem. Por favor, entre em contato com o suporte.');
+    }
+
+    private function applyFilters(object $filters): void
+    {
+        if (isset($filters->order_travel_status_id)) {
+            $this->travelRepository->where('order_travel_status_id', $filters->order_travel_status_id);
+        }
+
+        if (isset($filters->destination)) {
+            $search = "%{$filters->destination}%";
+            $this->travelRepository->whereLike('destination', $search);
+        }
+
+        $this->applyFilterBasedOnPeriod($filters);
+    }
+
+    private function applyFilterBasedOnPeriod(object $filters): void
+    {
+        $hasDepartureDate = isset($filters->departure_date);
+        $hasReturnDate = isset($filters->return_date);
+
+        if ($hasDepartureDate && $hasReturnDate) {
+            $this->travelRepository->where('departure_date', $filters->departure_date, '>');
+            $this->travelRepository->where('return_date', $filters->return_date, '<');
+        }
+
+        if ($hasDepartureDate && !$hasReturnDate) {
+            $this->travelRepository->where('departure_date', $filters->departure_date, '>');
+        }
+
+        if (!$hasDepartureDate && $hasReturnDate) {
+            $this->travelRepository->where('return_date', $filters->return_date, '<');
+        }
     }
 }

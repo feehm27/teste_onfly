@@ -28,9 +28,11 @@
                         "schema": {
                             "type": "integer",
                             "enum": [
-                                "1 - Solicitado, 2 - Aprovado, 3 - Cancelado"
+                                1,
+                                2,
+                                3
                             ],
-                            "example": 1
+                            "example": "1"
                         },
                         "example": 1
                     },
@@ -91,7 +93,70 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "A list of orders"
+                        "description": "Lista de viagens com paginação.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "current_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "name_applicant": {
+                                                        "type": "string",
+                                                        "example": "Teste de solicitante"
+                                                    },
+                                                    "destination": {
+                                                        "type": "string",
+                                                        "example": "Belo Horizonte"
+                                                    },
+                                                    "departure_date": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2025-02-06 13:00:00"
+                                                    },
+                                                    "return_date": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2025-02-06 12:00:00"
+                                                    },
+                                                    "user_id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Ação não permitida para o usuário.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Você não tem permissão para realizar esta ação."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             },
@@ -125,6 +190,10 @@
                                         },
                                         "data": {
                                             "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": "1"
+                                                },
                                                 "name_applicant": {
                                                     "type": "string",
                                                     "example": "Teste de solicitante"
@@ -248,6 +317,10 @@
                                         },
                                         "data": {
                                             "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": "1"
+                                                },
                                                 "order_travel_status_id": {
                                                     "type": "integer",
                                                     "example": "3"
@@ -381,6 +454,10 @@
                                         },
                                         "data": {
                                             "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": "1"
+                                                },
                                                 "order_travel_status_id": {
                                                     "type": "integer",
                                                     "example": "3"

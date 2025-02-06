@@ -30,8 +30,8 @@ class OrderTravelController extends Controller
      *        required=false,
      *     @OA\Schema(
      *         type="integer",
-     *         enum={"1 - Solicitado, 2 - Aprovado, 3 - Cancelado"},
-     *         example=1
+     *         enum={1,2,3},
+     *         example="1"
      *      ),
      *        style="form"
      *     ),
@@ -78,18 +78,44 @@ class OrderTravelController extends Controller
      *          @OA\Schema(type="int", default="15"),
      *          style="form"
      *       ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="A list of orders"
-     *     )
-     * )
+     *       @OA\Response(
+     *          response=200,
+     *          description="Lista de viagens com paginação.",
+     *          @OA\JsonContent(
+     *              type="object",
+     *              @OA\Property(property="current_page", type="integer", example=1),
+     *              @OA\Property(property="data", type="array",
+     *                  @OA\Items(
+     *                      type="object",
+     *                      @OA\Property(property="id", type="integer", example=1),
+     *                      @OA\Property(property="name_applicant", type="string", example="Teste de solicitante"),
+     *                      @OA\Property(property="destination", type="string", example="Belo Horizonte"),
+     *                      @OA\Property(property="departure_date", type="string", format="date-time", example="2025-02-06 13:00:00"),
+     *                      @OA\Property(property="return_date", type="string", format="date-time", example="2025-02-06 12:00:00"),
+     *                      @OA\Property(property="user_id", type="integer", example=1)
+     *                  )
+     *              ),
+     *          ),
+     *       ),
+     *       @OA\Response(
+     *           response=403,
+     *           description="Ação não permitida para o usuário.",
+     *           @OA\JsonContent(
+     *               type="object",
+     *               @OA\Property(property="message", type="string", example="Você não tem permissão para realizar esta ação.")
+     *           )
+     *       ),
+     *  )
      */
     public function index(OrderTravelIndexRequest $request): JsonResponse
     {
-        //TODO
-        //Obter identificador do usuario apos autenticação
-        $request['user_id'] = 1;
-        return response()->json($this->travelService->getTravelsWithFilters($request->validated()));
+        try {
+            $filters = (object)$request->validated();
+            return response()->json($this->travelService->getTravelsWithFilters($filters));
+
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
@@ -106,6 +132,7 @@ class OrderTravelController extends Controller
      *              type="object",
      *                  @OA\Property(property="message", type="string", example="Solicitação de viagem criada com sucesso."),
      *                  @OA\Property(property="data", type="object",
+     *                  @OA\Property(property="id", type="integer", example="1"),
      *                  @OA\Property(property="name_applicant", type="string", example="Teste de solicitante"),
      *                  @OA\Property(property="destination", type="string", example="Belo Horizonte"),
      *                  @OA\Property(property="departure_date", type="string", format="date-time", example="2025-02-06 13:00:00"),
@@ -192,6 +219,7 @@ class OrderTravelController extends Controller
      *               type="object",
      *                   @OA\Property(property="message", type="string", example="Status do pedido alterado com sucesso."),
      *                   @OA\Property(property="data", type="object",
+     *                   @OA\Property(property="id", type="integer", example="1"),
      *                   @OA\Property(property="order_travel_status_id", type="integer", example="3"),
      *                   @OA\Property(property="name_applicant", type="string", example="Teste de solicitante"),
      *                   @OA\Property(property="destination", type="string", example="Belo Horizonte"),
@@ -273,6 +301,7 @@ class OrderTravelController extends Controller
      *                type="object",
      *                    @OA\Property(property="message", type="string", example="Pedido de viagem encontrado com sucesso."),
      *                    @OA\Property(property="data", type="object",
+     *                    @OA\Property(property="id", type="integer", example="1"),
      *                    @OA\Property(property="order_travel_status_id", type="integer", example="3"),
      *                    @OA\Property(property="name_applicant", type="string", example="Teste de solicitante"),
      *                    @OA\Property(property="destination", type="string", example="Belo Horizonte"),
