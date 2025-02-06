@@ -223,10 +223,10 @@ class OrderTravelController extends Controller
      *      ),
      *      @OA\Response(
      *             response=404,
-     *             description="Pedido de viagem não encontrado.",
+     *             description="Pedido de viagem não encontrado. Verifique se o ID está correto.",
      *             @OA\JsonContent(
      *                 type="object",
-     *                 @OA\Property(property="error", type="string", example="Pedido de viagem não encontrado.")
+     *                 @OA\Property(property="error", type="string", example="Pedido de viagem não encontrado. Verifique se o ID está correto.")
      *             )
      *      ),
      *      @OA\Response(
@@ -292,10 +292,10 @@ class OrderTravelController extends Controller
      *        ),
      *       @OA\Response(
      *              response=404,
-     *              description="Pedido de viagem não encontrado.",
+     *              description="Pedido de viagem não encontrado. Verifique se o ID está correto",
      *              @OA\JsonContent(
      *                  type="object",
-     *                  @OA\Property(property="error", type="string", example="Pedido de viagem não encontrado.")
+     *                  @OA\Property(property="error", type="string", example="Pedido de viagem não encontrado. Verifique se o ID está correto.")
      *              )
      *       ),
      *       @OA\Response(

@@ -8,7 +8,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Symfony\Component\HttpFoundation\Response;
 
-class CheckOrderTravelNotExist implements ValidationRule
+class OrderTravelDoesNotExist implements ValidationRule
 {
     /**
      * Run the validation rule.
@@ -22,7 +22,7 @@ class CheckOrderTravelNotExist implements ValidationRule
         if (!$exists) {
             throw new HttpResponseException(
                 response()->json([
-                    'error' => 'Pedido de viagem não encontrado.'
+                    'error' => 'Pedido de viagem não encontrado. Verifique se o ID está correto.',
                 ], Response::HTTP_NOT_FOUND)
             );
         }

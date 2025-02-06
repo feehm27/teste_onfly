@@ -300,14 +300,14 @@
                         }
                     },
                     "404": {
-                        "description": "Pedido de viagem não encontrado.",
+                        "description": "Pedido de viagem não encontrado. Verifique se o ID está correto",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "error": {
                                             "type": "string",
-                                            "example": "Pedido de viagem não encontrado."
+                                            "example": "Pedido de viagem não encontrado. Verifique se o ID está correto."
                                         }
                                     },
                                     "type": "object"
@@ -457,14 +457,14 @@
                         }
                     },
                     "404": {
-                        "description": "Pedido de viagem não encontrado.",
+                        "description": "Pedido de viagem não encontrado. Verifique se o ID está correto.",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "error": {
                                             "type": "string",
-                                            "example": "Pedido de viagem não encontrado."
+                                            "example": "Pedido de viagem não encontrado. Verifique se o ID está correto."
                                         }
                                     },
                                     "type": "object"

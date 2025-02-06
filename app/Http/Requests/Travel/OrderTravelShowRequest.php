@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Travel;
 
-use App\Rules\CheckOrderTravelNotExist;
+use App\Rules\OrderTravelDoesNotExist;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -27,7 +27,7 @@ class OrderTravelShowRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => ['required', 'integer', new CheckOrderTravelNotExist()],
+            'id' => ['required', 'integer', new OrderTravelDoesNotExist()],
         ];
     }
 
