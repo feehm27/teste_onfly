@@ -26,8 +26,8 @@ class OrderTravelUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => ['required', 'exists:travel,id'],
-            'order_travel_status_id' => ['required', 'exists:order_travel_status,id', 'in:2,3'],
+            'id' => ['required','integer', 'exists:order_travels,id'],
+            'order_travel_status_id' => ['required','integer','exists:order_travel_status,id', 'in:2,3'],
         ];
     }
 
@@ -40,5 +40,26 @@ class OrderTravelUpdateRequest extends FormRequest
     {
         $response = ['errors' => $validator->errors()];
         throw new HttpResponseException(response()->json($response, Response::HTTP_UNPROCESSABLE_ENTITY));
+    }
+
+    public function messages()
+    {
+        return [
+            'id.exists' => 'Não existe pedido de viagem para o identificador informado.',
+            'order_travel_status_id.in' => 'O campo :attribute deve ser igual a 2 (Aprovado) ou 3 (Cancelado).',
+        ];
+    }
+
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'id' => $this->route('travel'),
+        ]);
     }
 }

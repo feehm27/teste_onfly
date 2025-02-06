@@ -113,7 +113,7 @@
                     }
                 },
                 "responses": {
-                    "200": {
+                    "201": {
                         "description": "Solicitação de viagem criada com sucesso.",
                         "content": {
                             "application/json": {
@@ -127,7 +127,7 @@
                                             "properties": {
                                                 "name_applicant": {
                                                     "type": "string",
-                                                    "example": "Testesolicitandte"
+                                                    "example": "Teste de solicitante"
                                                 },
                                                 "destination": {
                                                     "type": "string",
@@ -189,6 +189,22 @@
                                                 }
                                             },
                                             "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro inesperado ao criar pedido de viagem.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Erro inesperado ao criar pedido de viagem."
                                         }
                                     },
                                     "type": "object"
@@ -271,16 +287,107 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Produto atualizado com sucesso."
+                        "description": "Status do pedido alterado com sucesso.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Status do pedido alterado com sucesso."
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "order_travel_status_id": {
+                                                    "type": "integer",
+                                                    "example": "3"
+                                                },
+                                                "name_applicant": {
+                                                    "type": "string",
+                                                    "example": "Teste de solicitante"
+                                                },
+                                                "destination": {
+                                                    "type": "string",
+                                                    "example": "Belo Horizonte"
+                                                },
+                                                "departure_date": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2025-02-06 13:00:00"
+                                                },
+                                                "return_date": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2025-02-06 12:00:00"
+                                                },
+                                                "user_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
-                    "401": {
-                        "description": "Não autenticado."
+                    "403": {
+                        "description": "Ação não permitida para o usuário.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Você não tem permissão para realizar esta ação."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
                     "422": {
-                        "description": "Conteúdo não processável."
+                        "description": "Solicitação inválida - dados fornecidos não são válidos.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "properties": {
+                                                "order_travel_status_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "O campo order travel status id deve ser igual a 2 (Aprovado) ou 3 (Cancelado)."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
                     "500": {
-                        "description": "Erro interno do servidor."
+                        "description": "Erro inesperado ao atualizar o status do pedido.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Não foi possível atualizar o status da viagem. Por favor, entre em contato com o suporte."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }

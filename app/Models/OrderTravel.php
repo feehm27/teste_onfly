@@ -2,14 +2,17 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class OrderTravel extends Model
 {
+    use HasFactory;
+
     protected $table = 'order_travels';
 
-    protected $hidden = ['id','created_at', 'updated_at'];
+    protected $hidden = ['id', 'created_at', 'updated_at'];
 
     protected $fillable = [
         'order_travel_status_id',
@@ -22,6 +25,6 @@ class OrderTravel extends Model
 
     public function status(): HasOne
     {
-        return $this->hasOne(OrderTravelStatus::class,'travel_status_id');
+        return $this->hasOne(OrderTravelStatus::class, 'travel_status_id');
     }
 }

@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\OrderTravel;
 use App\Repositories\Contracts\OrderTravelRepositoryInterface;
-use Illuminate\Support\Facades\Gate;
-use Symfony\Component\HttpFoundation\Response;
+use Exception;
 
 class OrderTravelService
 {
@@ -38,14 +38,18 @@ class OrderTravelService
         return $this->travelRepository->create($inputs);
     }
 
-    public function updateStatusId(array $inputs): ?bool
+    public function updateStatusId(array $inputs): OrderTravel
     {
-        $travel = $this->travelRepository->find($inputs['id']);
+        $orderTravelId = $inputs['id'];
+        $params = [
+            'order_travel_status_id' => $inputs['order_travel_status_id']
+        ];
 
-        if (Gate::denies('update-status-travel', $travel)) {
-            abort(Response::HTTP_UNAUTHORIZED, 'Este usuário não possui autorização para alterar o pedido.');
-        }
+        $updateSuccessful = $this->travelRepository->updateById($orderTravelId, $params);
 
-        return $this->travelRepository->updateById($inputs['id'], $inputs['travel_status_id']);
+        return $updateSuccessful
+            ? $this->travelRepository->find($orderTravelId)
+            : throw new Exception('Não foi possível atualizar o status da viagem. Por favor, entre em contato com o suporte.');
+
     }
 }
