@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\app\Http\Controllers;
 
+use App\Models\OrderTravel;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\{DatabaseTransactions, WithoutMiddleware};
@@ -28,7 +29,7 @@ class OrderTravelControllerTest extends TestCase
         $response->assertCreated();
 
         $response->assertJsonFragment([
-            'message' => 'Solicitação de viagem criada com sucesso',
+            'message' => 'Solicitação de viagem criada com sucesso.',
         ]);
 
         $response->assertJsonStructure([
@@ -37,6 +38,34 @@ class OrderTravelControllerTest extends TestCase
                 'name_applicant',
                 'destination',
                 'departure_date',
+                'return_date',
+                'user_id',
+            ],
+        ]);
+    }
+
+    public function testShouldUpdateTravelOrderStatus()
+    {
+        $orderTravel = OrderTravel::factory()->create(['order_travel_status_id' => 1]);
+
+        $data = [
+            'order_travel_status_id' => 2,
+        ];
+
+        $response = $this->put('/api/v1/order/travels/' . $orderTravel->id, $data);
+        $response->assertSuccessful();
+
+        $response->assertJsonFragment([
+            'message' => "Status do pedido alterado com sucesso.",
+        ]);
+
+        $response->assertJsonStructure([
+            'message',
+            'data' => [
+                'name_applicant',
+                'destination',
+                'departure_date',
+                'order_travel_status_id',
                 'return_date',
                 'user_id',
             ],
