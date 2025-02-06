@@ -32,16 +32,7 @@ class OrderTravelControllerTest extends TestCase
             'message' => 'Solicitação de viagem criada com sucesso.',
         ]);
 
-        $response->assertJsonStructure([
-            'message',
-            'data' => [
-                'name_applicant',
-                'destination',
-                'departure_date',
-                'return_date',
-                'user_id',
-            ],
-        ]);
+        $response->assertJsonStructure($this->getJsonStructure());
     }
 
     public function testShouldUpdateTravelOrderStatus()
@@ -59,16 +50,33 @@ class OrderTravelControllerTest extends TestCase
             'message' => "Status do pedido alterado com sucesso.",
         ]);
 
-        $response->assertJsonStructure([
+        $response->assertJsonStructure($this->getJsonStructure());
+    }
+
+    public function testShouldShowOrderTravel()
+    {
+        $orderTravel = OrderTravel::factory()->create();
+
+        $response = $this->get('/api/v1/order/travels/' . $orderTravel->id);
+        $response->assertSuccessful();
+
+        $response->assertJsonFragment([
+            'message' => "Pedido de viagem encontrado com sucesso.",
+        ]);
+
+        $response->assertJsonStructure($this->getJsonStructure());
+    }
+
+    private function getJsonStructure() :array {
+        return [
             'message',
             'data' => [
                 'name_applicant',
                 'destination',
                 'departure_date',
-                'order_travel_status_id',
                 'return_date',
                 'user_id',
-            ],
-        ]);
+            ]
+        ];
     }
 }

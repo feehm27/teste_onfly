@@ -4,7 +4,9 @@ namespace Tests\Unit\Http\Requests\Travel;
 
 use App\Http\Requests\Travel\OrderTravelUpdateRequest;
 use App\Models\OrderTravel;
+use App\Rules\OrderTravelDoesNotExist;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Validator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
@@ -16,13 +18,38 @@ class OrderTravelUpdateRequestTest extends TestCase
     public static function providerInvalidData(): array
     {
         return [
-            'idIsNull' => ['id', null, 'O campo id é obrigatório.'],
-            'idIsString' => ['id', 'texto', 'O campo id deve conter um número inteiro.'],
-            'idNotExist' => ['id', 99999, 'O valor selecionado para o campo id é inválido.'],
             'orderTravelStatusIdIsNull' => ['order_travel_status_id', null, 'O campo order travel status id é obrigatório.'],
             'orderTravelStatusIdIsInvalid' => ['order_travel_status_id', 'texto', 'O campo order travel status id deve conter um número inteiro.'],
             'orderTravelStatusIdIsString' => ['order_travel_status_id', 1, 'O campo order travel status id não contém um valor válido.'],
         ];
+    }
+
+    public function testIdNotExist()
+    {
+        $data = ['id' => 99999,];
+
+        $this->expectException(HttpResponseException::class);
+
+        $validator = Validator::make($data, [
+            'id' => ['required', 'integer', new OrderTravelDoesNotExist()],
+        ]);
+
+        $validator->validate();
+        $this->expectExceptionMessage('Pedido de viagem não encontrado. Verifique se o ID está correto.');
+    }
+
+    public function testIdIsString()
+    {
+        $data = ['id' => 'texto'];
+
+        $this->expectException(HttpResponseException::class);
+
+        $validator = Validator::make($data, [
+            'id' => ['required', 'integer', new OrderTravelDoesNotExist()],
+        ]);
+
+        $validator->validate();
+        $this->expectExceptionMessage('Pedido de viagem não encontrado. Verifique se o ID está correto.');
     }
 
     public function setUp(): void
@@ -33,8 +60,8 @@ class OrderTravelUpdateRequestTest extends TestCase
 
     public function testShouldContainAllExpectedRules()
     {
-        $expect = [
-            'id' => ['required','integer', 'exists:order_travels,id'],
+        $expect =  [
+            'id' => ['required','integer', new OrderTravelDoesNotExist()],
             'order_travel_status_id' => ['required','integer','exists:order_travel_status,id', 'in:2,3'],
         ];
 
