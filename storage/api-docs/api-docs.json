@@ -76,7 +76,8 @@
                         "required": false,
                         "style": "form",
                         "schema": {
-                            "type": "boolean"
+                            "type": "boolean",
+                            "default": true
                         }
                     },
                     {

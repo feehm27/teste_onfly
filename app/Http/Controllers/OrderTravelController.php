@@ -67,7 +67,7 @@ class OrderTravelController extends Controller
      *         in="query",
      *         description="Define se o retorno será com paginação.",
      *         required=false,
-     *         @OA\Schema(type="boolean"),
+     *         @OA\Schema(type="boolean", default=true),
      *         style="form"
      *      ),
      *      @OA\Parameter(

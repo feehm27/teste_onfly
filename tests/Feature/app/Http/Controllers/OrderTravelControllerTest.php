@@ -53,6 +53,28 @@ class OrderTravelControllerTest extends TestCase
         $response->assertJsonStructure($this->getJsonStructure());
     }
 
+    public function testShouldIndexOrdersTravelWithPagination()
+    {
+        $response = $this->get('/api/v1/order/travels/');
+        $response->assertSuccessful();
+
+        $response->assertJsonPath('current_page', 1);
+        $response->assertJsonPath('per_page', 15);
+        $response->assertJsonPath('from', 1);
+        $response->assertJsonPath('to', 15);
+
+        $response->assertJsonStructure(['data']);
+    }
+
+    public function testShouldIndexOrdersTravelWithoutPagination()
+    {
+        $data = ['paginate' => false];
+        $response = $this->get('/api/v1/order/travels/', $data);
+
+        $response->assertSuccessful();
+        $response->assertJsonStructure(['data']);
+    }
+
     public function testShouldShowOrderTravel()
     {
         $orderTravel = OrderTravel::factory()->create();

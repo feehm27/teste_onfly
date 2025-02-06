@@ -29,7 +29,7 @@ class OrderTravelIndexRequest extends FormRequest
             'order_travel_status_id' => ['nullable', 'exists:order_travel_status,id'],
             'paginate' => ['nullable', 'boolean'],
             'departure_date' => ['nullable', 'date_format:Y-m-d'],
-            'return_date' => ['nullable', 'date_format:Y-m-d','after:departure_date'],
+            'return_date' => ['nullable', 'date_format:Y-m-d','after_or_equal:departure_date'],
             'destination' => ['nullable', 'string'],
             'limit' => ['nullable', 'integer'],
         ];
