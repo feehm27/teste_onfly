@@ -1,0 +1,343 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Onfly - Pedido de Viagens",
+        "description": "Serviço que gerencia os pedidos de viagens dos clientes",
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "/api/v1"
+        }
+    ],
+    "paths": {
+        "/order/travels": {
+            "get": {
+                "tags": [
+                    "Pedidos de Viagem"
+                ],
+                "summary": "Obtém os pedidos de viagem",
+                "operationId": "3e4bd58b329417860c2c4201912e216e",
+                "parameters": [
+                    {
+                        "name": "order_travel_status_id",
+                        "in": "query",
+                        "description": "Filtra pelo identificador de status do pedido.",
+                        "required": false,
+                        "style": "form",
+                        "schema": {
+                            "type": "integer",
+                            "enum": [
+                                "1 - Solicitado, 2 - Aprovado, 3 - Cancelado"
+                            ],
+                            "example": 1
+                        },
+                        "example": 1
+                    },
+                    {
+                        "name": "departure_date",
+                        "in": "query",
+                        "description": "Filtra pela data de inicio da viagem.",
+                        "required": false,
+                        "style": "form",
+                        "schema": {
+                            "type": "date"
+                        },
+                        "example": "2025-02-05"
+                    },
+                    {
+                        "name": "return_date",
+                        "in": "query",
+                        "description": "Filtra pela data de retorno da viagem.",
+                        "required": false,
+                        "style": "form",
+                        "schema": {
+                            "type": "date"
+                        },
+                        "example": "2025-02-10"
+                    },
+                    {
+                        "name": "destination",
+                        "in": "query",
+                        "description": "Filtra pelo destino.",
+                        "required": false,
+                        "style": "form",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "Belo Horizonte"
+                    },
+                    {
+                        "name": "paginate",
+                        "in": "query",
+                        "description": "Define se o retorno será com paginação.",
+                        "required": false,
+                        "style": "form",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Quantidade de registros por pagina.",
+                        "required": false,
+                        "style": "form",
+                        "schema": {
+                            "type": "int",
+                            "default": "15"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A list of orders"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Pedidos de Viagem"
+                ],
+                "summary": "Cria um pedido de viagem",
+                "operationId": "2a49391d96f5cf301c6180ce285892c3",
+                "requestBody": {
+                    "description": "Dados necessários para criar um pedido de viagem",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OrderTravelStoreRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Solicitação de viagem criada com sucesso.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Solicitação de viagem criada com sucesso."
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "name_applicant": {
+                                                    "type": "string",
+                                                    "example": "Testesolicitandte"
+                                                },
+                                                "destination": {
+                                                    "type": "string",
+                                                    "example": "Belo Horizonte"
+                                                },
+                                                "departure_date": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2025-02-06 13:00:00"
+                                                },
+                                                "return_date": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2025-02-06 12:00:00"
+                                                },
+                                                "user_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Ação não permitida para o usuário.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Você não tem permissão para realizar esta ação."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Solicitação inválida - dados fornecidos não são válidos.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "properties": {
+                                                "name_applicant": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "O campo name applicant é obrigatório."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/order/travels/{id}": {
+            "get": {
+                "tags": [
+                    "Pedidos de Viagem"
+                ],
+                "summary": "Obtém um pedido pelo seu identificador",
+                "operationId": "4d8e894ca7ea7793997462a283b0c532",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Identificador do pedido",
+                        "required": true,
+                        "style": "form",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Produto atualizado com sucesso."
+                    },
+                    "401": {
+                        "description": "Não autenticado."
+                    },
+                    "422": {
+                        "description": "Conteúdo não processável."
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor."
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Pedidos de Viagem"
+                ],
+                "summary": "Atualiza o status de um pedido",
+                "operationId": "32ee1fbb1e3b95d50943d67bf63ffac3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Identificador do pedido",
+                        "required": true,
+                        "style": "form",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": "1"
+                    },
+                    {
+                        "name": "order_travel_status_id",
+                        "in": "query",
+                        "description": "Identificador de status do pedido.",
+                        "required": true,
+                        "style": "form",
+                        "schema": {
+                            "type": "integer",
+                            "enum": [
+                                2,
+                                3
+                            ],
+                            "example": 3
+                        },
+                        "example": "2"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Produto atualizado com sucesso."
+                    },
+                    "401": {
+                        "description": "Não autenticado."
+                    },
+                    "422": {
+                        "description": "Conteúdo não processável."
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor."
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "OrderTravelStoreRequest": {
+                "title": "OrderTravelStoreRequest",
+                "description": "Class OrderTravelStoreRequest",
+                "required": [
+                    "name_applicant",
+                    "destination",
+                    "departure_date",
+                    "return_date"
+                ],
+                "properties": {
+                    "name_applicant": {
+                        "title": "name_applicant",
+                        "description": "Nome do solicitante",
+                        "type": "string",
+                        "format": "string",
+                        "example": "Fernando Amorim da Silva"
+                    },
+                    "destination": {
+                        "title": "destination",
+                        "description": "Destino da viagem",
+                        "type": "string",
+                        "format": "string",
+                        "example": "Rio de Janeiro"
+                    },
+                    "departure_date": {
+                        "title": "departure_date",
+                        "description": "Data de ida",
+                        "type": "string",
+                        "format": "string",
+                        "example": "2025-02-05 08:30:00"
+                    },
+                    "return_date": {
+                        "title": "return_date",
+                        "description": "Data de retorno",
+                        "type": "string",
+                        "format": "string",
+                        "example": "2025-02-10 18:30:00"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "OrderTravelStoreRequest"
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Pedidos de Viagem",
+            "description": "Pedidos de Viagem"
+        }
+    ]
+}
