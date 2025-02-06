@@ -89,7 +89,7 @@ class OrderTravelController extends Controller
         //TODO
         //Obter identificador do usuario apos autenticação
         $request['user_id'] = 1;
-        return response()->json($this->travelService->getListOfTravels($request->validated()));
+        return response()->json($this->travelService->getTravelsWithFilters($request->validated()));
     }
 
     /**
@@ -149,7 +149,7 @@ class OrderTravelController extends Controller
         try {
             return response()->json([
                 'message' => "Solicitação de viagem criada com sucesso.",
-                'data' => $this->travelService->create($request->validated())
+                'data' => $this->travelService->createTravel($request->validated())
             ], Response::HTTP_CREATED);
 
         } catch (Exception $exception) {
@@ -222,6 +222,14 @@ class OrderTravelController extends Controller
      *           ),
      *      ),
      *      @OA\Response(
+     *             response=404,
+     *             description="Pedido de viagem não encontrado.",
+     *             @OA\JsonContent(
+     *                 type="object",
+     *                 @OA\Property(property="error", type="string", example="Pedido de viagem não encontrado.")
+     *             )
+     *      ),
+     *      @OA\Response(
      *            response=500,
      *            description="Erro inesperado ao atualizar o status do pedido.",
      *            @OA\JsonContent(
@@ -237,7 +245,7 @@ class OrderTravelController extends Controller
         try {
             return response()->json([
                 'message' => "Status do pedido alterado com sucesso.",
-                'data' => $this->travelService->updateStatusId($request->validated())
+                'data' => $this->travelService->updateTravelStatus($request->validated())
             ]);
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -258,14 +266,58 @@ class OrderTravelController extends Controller
      *          @OA\Schema(type="integer"),
      *          style="form"
      *      ),
-     *      @OA\Response(response=200, description="Produto atualizado com sucesso."),
-     *      @OA\Response(response=401, description="Não autenticado."),
-     *      @OA\Response(response=422, description="Conteúdo não processável."),
-     *      @OA\Response(response=500, description="Erro interno do servidor."),
+     *           @OA\Response(
+     *            response=200,
+     *            description="Pedido de viagem encontrado com sucesso.",
+     *            @OA\JsonContent(
+     *                type="object",
+     *                    @OA\Property(property="message", type="string", example="Pedido de viagem encontrado com sucesso."),
+     *                    @OA\Property(property="data", type="object",
+     *                    @OA\Property(property="order_travel_status_id", type="integer", example="3"),
+     *                    @OA\Property(property="name_applicant", type="string", example="Teste de solicitante"),
+     *                    @OA\Property(property="destination", type="string", example="Belo Horizonte"),
+     *                    @OA\Property(property="departure_date", type="string", format="date-time", example="2025-02-06 13:00:00"),
+     *                    @OA\Property(property="return_date", type="string", format="date-time", example="2025-02-06 12:00:00"),
+     *                    @OA\Property(property="user_id", type="integer", example=1)
+     *                )
+     *            ),
+     *        ),
+     *       @OA\Response(
+     *            response=403,
+     *            description="Ação não permitida para o usuário.",
+     *            @OA\JsonContent(
+     *                type="object",
+     *                @OA\Property(property="message", type="string", example="Você não tem permissão para realizar esta ação.")
+     *            )
+     *        ),
+     *       @OA\Response(
+     *              response=404,
+     *              description="Pedido de viagem não encontrado.",
+     *              @OA\JsonContent(
+     *                  type="object",
+     *                  @OA\Property(property="error", type="string", example="Pedido de viagem não encontrado.")
+     *              )
+     *       ),
+     *       @OA\Response(
+     *             response=500,
+     *             description="Erro inesperado ao buscar os dados do pedido.",
+     *             @OA\JsonContent(
+     *                 type="object",
+     *                 @OA\Property(property="error", type="string", example="Erro inesperado ao buscar os dados do pedido.")
+     *             )
+     *         ),
      *  ),
      * */
     public function show(OrderTravelShowRequest $request): JsonResponse
     {
-        return response()->json($this->travelService->findTravel($request->id));
+        try {
+            return response()->json([
+                'message' => "Pedido de viagem encontrado com sucesso.",
+                'data' => $this->travelService->findById($request->id)
+            ]);
+
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }

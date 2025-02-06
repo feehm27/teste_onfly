@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Travel;
 
+use App\Rules\CheckOrderTravelNotExist;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -26,7 +27,7 @@ class OrderTravelShowRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => ['required', 'exists:travel,id'],
+            'id' => ['required', 'integer', new CheckOrderTravelNotExist()],
         ];
     }
 
@@ -49,7 +50,7 @@ class OrderTravelShowRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'id' => $this->route('id'),
+            'id' => $this->route('travel'),
         ]);
     }
 }

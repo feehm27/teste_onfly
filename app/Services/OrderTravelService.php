@@ -12,12 +12,12 @@ class OrderTravelService
     {
     }
 
-    public function findTravel(int $travelId)
+    public function findById(int $travelId)
     {
-        return $this->travelRepository->find($travelId);
+       return $this->travelRepository->find($travelId);
     }
 
-    public function getListOfTravels(array $filters)
+    public function getTravelsWithFilters(array $filters)
     {
         if (isset($filters['travel_status_id'])) {
             $this->travelRepository->where('travel_status_id', $filters['travel_status_id']);
@@ -30,7 +30,7 @@ class OrderTravelService
         return $this->travelRepository->get();
     }
 
-    public function create(array $inputs)
+    public function createTravel(array $inputs)
     {
         //TODO
         //Obter identificador do usuario apos autenticação
@@ -38,7 +38,7 @@ class OrderTravelService
         return $this->travelRepository->create($inputs);
     }
 
-    public function updateStatusId(array $inputs): OrderTravel
+    public function updateTravelStatus(array $inputs): OrderTravel
     {
         $orderTravelId = $inputs['id'];
         $params = [
@@ -50,6 +50,5 @@ class OrderTravelService
         return $updateSuccessful
             ? $this->travelRepository->find($orderTravelId)
             : throw new Exception('Não foi possível atualizar o status da viagem. Por favor, entre em contato com o suporte.');
-
     }
 }

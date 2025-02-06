@@ -237,16 +237,99 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Produto atualizado com sucesso."
+                        "description": "Pedido de viagem encontrado com sucesso.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Pedido de viagem encontrado com sucesso."
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "order_travel_status_id": {
+                                                    "type": "integer",
+                                                    "example": "3"
+                                                },
+                                                "name_applicant": {
+                                                    "type": "string",
+                                                    "example": "Teste de solicitante"
+                                                },
+                                                "destination": {
+                                                    "type": "string",
+                                                    "example": "Belo Horizonte"
+                                                },
+                                                "departure_date": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2025-02-06 13:00:00"
+                                                },
+                                                "return_date": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2025-02-06 12:00:00"
+                                                },
+                                                "user_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
-                    "401": {
-                        "description": "Não autenticado."
+                    "403": {
+                        "description": "Ação não permitida para o usuário.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Você não tem permissão para realizar esta ação."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
-                    "422": {
-                        "description": "Conteúdo não processável."
+                    "404": {
+                        "description": "Pedido de viagem não encontrado.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Pedido de viagem não encontrado."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
                     "500": {
-                        "description": "Erro interno do servidor."
+                        "description": "Erro inesperado ao buscar os dados do pedido.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Erro inesperado ao buscar os dados do pedido."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             },
@@ -366,6 +449,22 @@
                                                 }
                                             },
                                             "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Pedido de viagem não encontrado.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Pedido de viagem não encontrado."
                                         }
                                     },
                                     "type": "object"

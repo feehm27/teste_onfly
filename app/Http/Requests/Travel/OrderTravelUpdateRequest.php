@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Travel;
 
+use App\Rules\CheckOrderTravelNotExist;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -26,7 +27,7 @@ class OrderTravelUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => ['required','integer', 'exists:order_travels,id'],
+            'id' => ['required','integer', new CheckOrderTravelNotExist()],
             'order_travel_status_id' => ['required','integer','exists:order_travel_status,id', 'in:2,3'],
         ];
     }
@@ -45,7 +46,6 @@ class OrderTravelUpdateRequest extends FormRequest
     public function messages()
     {
         return [
-            'id.exists' => 'Não existe pedido de viagem para o identificador informado.',
             'order_travel_status_id.in' => 'O campo :attribute deve ser igual a 2 (Aprovado) ou 3 (Cancelado).',
         ];
     }
