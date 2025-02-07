@@ -8,9 +8,6 @@
     "servers": [
         {
             "url": "/api/v1"
-        },
-        {
-            "url": "http://my-default-host.com"
         }
     ],
     "paths": {
