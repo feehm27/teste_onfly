@@ -6,6 +6,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class OrderTravelIndexRequest extends FormRequest
@@ -32,6 +33,7 @@ class OrderTravelIndexRequest extends FormRequest
             'return_date' => ['nullable', 'date_format:Y-m-d','after_or_equal:departure_date'],
             'destination' => ['nullable', 'string'],
             'limit' => ['nullable', 'integer'],
+            'user_id' => ['required', 'exists:users,id'],
         ];
     }
 
@@ -62,6 +64,7 @@ class OrderTravelIndexRequest extends FormRequest
         $this->merge([
             'paginate' => $paginate,
             'limit' => $this->input('limit') ?? 15,
+            'user_id' => Auth::id()
         ]);
     }
 }

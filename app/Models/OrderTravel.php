@@ -28,4 +28,9 @@ class OrderTravel extends Model
     {
         return $this->hasOne(OrderTravelStatus::class, 'travel_status_id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

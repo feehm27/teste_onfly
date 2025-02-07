@@ -84,7 +84,7 @@ abstract class AbstractEloquentRepository
     public function orderBy(string $column, string $direction = 'asc'): static
     {
         if (!$this->query) {
-            $this->newQuery();
+            $this->newQuery()->mountWhere();
         }
 
         $this->query->orderBy($column, $direction);

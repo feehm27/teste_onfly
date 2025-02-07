@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Travel;
 
-use App\Rules\OrderTravelDoesNotExist;
+use App\Exceptions\UnauthorizedException;
+use App\Exceptions\OrderTravelNotFoundException;
+use App\Models\OrderTravel;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -13,9 +15,21 @@ class OrderTravelShowRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
+     * @throws OrderTravelNotFoundException
+     * @throws UnauthorizedException
      */
     public function authorize(): bool
     {
+        $orderTravel = OrderTravel::find($this->route('travel'));
+
+        if (!$orderTravel) {
+            throw new OrderTravelNotFoundException();
+        }
+
+        if (!$this->user()->can('permission', $orderTravel)) {
+            throw new UnauthorizedException();
+        }
+
         return true;
     }
 
@@ -27,7 +41,7 @@ class OrderTravelShowRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => ['required', 'integer', new OrderTravelDoesNotExist()],
+            'id' => ['required', 'integer'],
         ];
     }
 
@@ -52,5 +66,9 @@ class OrderTravelShowRequest extends FormRequest
         $this->merge([
             'id' => $this->route('travel'),
         ]);
+    }
+
+    private function teste(){
+
     }
 }

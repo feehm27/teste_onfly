@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\OrderTravelCanceledException;
+use App\Exceptions\CancellationNotAllowedException;
 use App\Http\Requests\Travel\OrderTravelIndexRequest;
 use App\Http\Requests\Travel\OrderTravelShowRequest;
 use App\Http\Requests\Travel\OrderTravelStoreRequest;
@@ -285,9 +285,9 @@ class OrderTravelController extends Controller
         try {
             return response()->json([
                 'message' => "Status do pedido alterado com sucesso.",
-                'data' => $this->travelService->updateTravelStatus($request->validated())
+                'data' => $this->travelService->updateTravelStatus((object)$request->validated())
             ]);
-        } catch (OrderTravelCanceledException $exception) {
+        } catch (CancellationNotAllowedException $exception) {
             return response()->json(['error' => $exception->getMessage()], $exception->getCode());
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()]);

@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Exceptions\OrderTravelCanceledException;
+use App\Exceptions\CancellationNotAllowedException;
 use App\Models\OrderTravel;
 use App\Repositories\Contracts\OrderTravelRepositoryInterface;
 use Carbon\Carbon;
@@ -37,6 +37,8 @@ class OrderTravelService
 
     private function applyFilters(object $filters): void
     {
+        $this->travelRepository->where('user_id', $filters->user_id);
+
         if (isset($filters->order_travel_status_id)) {
             $this->travelRepository->where('order_travel_status_id', $filters->order_travel_status_id);
         }
@@ -76,14 +78,12 @@ class OrderTravelService
     /**
      * @throws Exception
      */
-    public function updateTravelStatus(array $inputs): OrderTravel
+    public function updateTravelStatus(object $inputs): OrderTravel
     {
-        $orderTravel = $this->travelRepository->find($inputs['id']);
-        $orderTravelStatusId = $inputs['order_travel_status_id'];
+        $orderTravel = $this->travelRepository->find($inputs->id);
+        $this->checkIfCanBeCancelled($inputs->order_travel_status_id, $orderTravel);
 
-        $this->checkIfCanBeCancelled($orderTravelStatusId, $orderTravel);
-
-        $orderTravel->order_travel_status_id = $orderTravelStatusId;
+        $orderTravel->order_travel_status_id = $inputs->order_travel_status_id;
         $orderTravel->save();
 
         return $orderTravel;
@@ -100,7 +100,7 @@ class OrderTravelService
             $currentDate = Carbon::now();
 
             if ($providedDate->diffInHours($currentDate) > 24) {
-                throw new OrderTravelCanceledException(Response::HTTP_BAD_REQUEST);
+                throw new CancellationNotAllowedException();
             }
         }
     }
