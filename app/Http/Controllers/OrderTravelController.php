@@ -22,6 +22,7 @@ class OrderTravelController extends Controller
      * @OA\Get(
      *     path="/order/travels",
      *     summary="Obtém os pedidos de viagem",
+     *     security={{"bearerAuth": {}}},
      *     tags={"Pedidos de Viagem"},
      *     @OA\Parameter(
      *        name="order_travel_status_id",
@@ -123,6 +124,7 @@ class OrderTravelController extends Controller
      * @OA\Post(
      *  path="/order/travels",
      *  summary="Cria um pedido de viagem",
+     *  security={{"bearerAuth": {}}},
      *  tags={"Pedidos de Viagem"},
      *  @OA\RequestBody( description="Dados necessários para criar um pedido de viagem", required=true,
      *  @OA\JsonContent(ref="#/components/schemas/OrderTravelStoreRequest")),
@@ -189,6 +191,7 @@ class OrderTravelController extends Controller
      * @OA\Put(
      *  path="/order/travels/{id}",
      *  tags={"Pedidos de Viagem"},
+     *  security={{"bearerAuth": {}}},
      *  summary="Atualiza o status de um pedido",
      *      @OA\Parameter(
      *          name="id",
@@ -295,6 +298,7 @@ class OrderTravelController extends Controller
      * @OA\Get(
      *  path="/order/travels/{id}",
      *  tags={"Pedidos de Viagem"},
+     *  security={{"bearerAuth": {}}},
      *  summary="Obtém um pedido pelo seu identificador",
      *      @OA\Parameter(
      *          name="id",
