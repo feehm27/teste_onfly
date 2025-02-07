@@ -3,13 +3,14 @@
 namespace Tests\Unit\Http\Requests\Travel;
 
 use App\Http\Requests\Travel\OrderTravelIndexRequest;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Validator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
-class OrderTravelndexRequestTest extends TestCase
+class OrderTravelIndexRequestTest extends TestCase
 {
     use WithFaker;
 
@@ -21,13 +22,14 @@ class OrderTravelndexRequestTest extends TestCase
 
     public function testShouldContainAllExpectedRules()
     {
-        $expect =  [
+        $expect = [
             'order_travel_status_id' => ['nullable', 'exists:order_travel_status,id'],
             'paginate' => ['nullable', 'boolean'],
             'departure_date' => ['nullable', 'date_format:Y-m-d'],
             'return_date' => ['nullable', 'date_format:Y-m-d','after_or_equal:departure_date'],
             'destination' => ['nullable', 'string'],
             'limit' => ['nullable', 'integer'],
+            'user_id' => ['required', 'exists:users,id'],
         ];
 
         $this->assertEquals($expect, $this->request->rules());
@@ -42,6 +44,7 @@ class OrderTravelndexRequestTest extends TestCase
             'return_date' => Carbon::now()->format('Y-m-d'),
             'destination' => 'Belo Horizonte',
             'limit' => 3,
+            'user_id' => User::factory()->create()->id,
         ], $this->request->rules());
 
         $this->assertTrue(!$validator->fails());

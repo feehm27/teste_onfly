@@ -4,9 +4,7 @@ namespace Tests\Unit\Http\Requests\Travel;
 
 use App\Http\Requests\Travel\OrderTravelUpdateRequest;
 use App\Models\OrderTravel;
-use App\Rules\OrderTravelDoesNotExist;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Validator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
@@ -24,32 +22,30 @@ class OrderTravelUpdateRequestTest extends TestCase
         ];
     }
 
-    public function testIdNotExist()
+    public function testIdIsNull()
     {
-        $data = ['id' => 99999,];
-
-        $this->expectException(HttpResponseException::class);
+        $data = ['id' => null];
 
         $validator = Validator::make($data, [
-            'id' => ['required', 'integer', new OrderTravelDoesNotExist()],
+            'id' => ['required', 'integer'],
         ]);
 
-        $validator->validate();
-        $this->expectExceptionMessage('Pedido de viagem não encontrado. Verifique se o ID está correto.');
+        $errors = $validator->errors();
+        $expected = 'O campo id é obrigatório.';
+        $this->assertEquals($expected, $errors->get('id')[0]);
     }
 
     public function testIdIsString()
     {
         $data = ['id' => 'texto'];
 
-        $this->expectException(HttpResponseException::class);
-
         $validator = Validator::make($data, [
-            'id' => ['required', 'integer', new OrderTravelDoesNotExist()],
+            'id' => ['required', 'integer'],
         ]);
 
-        $validator->validate();
-        $this->expectExceptionMessage('Pedido de viagem não encontrado. Verifique se o ID está correto.');
+        $errors = $validator->errors();
+        $expected = 'O campo id deve conter um número inteiro.';
+        $this->assertEquals($expected, $errors->get('id')[0]);
     }
 
     public function setUp(): void
@@ -60,9 +56,9 @@ class OrderTravelUpdateRequestTest extends TestCase
 
     public function testShouldContainAllExpectedRules()
     {
-        $expect =  [
-            'id' => ['required','integer', new OrderTravelDoesNotExist()],
-            'order_travel_status_id' => ['required','integer','exists:order_travel_status,id', 'in:2,3'],
+        $expect = [
+            'id' => ['required', 'integer'],
+            'order_travel_status_id' => ['required', 'integer', 'exists:order_travel_status,id', 'in:2,3'],
         ];
 
         $this->assertEquals($expect, $this->request->rules());
@@ -76,11 +72,6 @@ class OrderTravelUpdateRequestTest extends TestCase
         ], $this->request->rules());
 
         $this->assertTrue(!$validator->fails());
-    }
-
-    public function testShouldBeAuthorized()
-    {
-        $this->assertEquals(true, $this->request->authorize());
     }
 
     #[DataProvider('providerInvalidData')]

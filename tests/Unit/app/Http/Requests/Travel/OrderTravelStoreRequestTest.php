@@ -3,6 +3,7 @@
 namespace Tests\Unit\Http\Requests\Travel;
 
 use App\Http\Requests\Travel\OrderTravelStoreRequest;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Validator;
@@ -22,10 +23,11 @@ class OrderTravelStoreRequestTest extends TestCase
     public function testShouldContainAllExpectedRules()
     {
         $expect = [
-            'name_applicant' => ['required', 'string'],
-            'destination' => ['required', 'string'],
-            'departure_date' => ['required', 'date_format:Y-m-d H:i:s', 'after:today'],
+            'name_applicant' => ['required','string'],
+            'destination' => ['required','string'],
+            'departure_date' => ['required','date_format:Y-m-d H:i:s','after_or_equal:today'],
             'return_date' => ['required', 'date_format:Y-m-d H:i:s', 'after:departure_date'],
+            'user_id' => ['required','integer','exists:users,id'],
         ];
 
         $this->assertEquals($expect, $this->request->rules());
@@ -38,6 +40,7 @@ class OrderTravelStoreRequestTest extends TestCase
             'destination' => 'Belo Horizonte',
             'departure_date' => Carbon::now()->addDay()->format('Y-m-d H:i:s'),
             'return_date' => Carbon::now()->addDay()->addSeconds(30)->format('Y-m-d H:i:s'),
+            'user_id' => User::factory()->create()->id
         ], $this->request->rules());
 
         $this->assertTrue(!$validator->fails());
@@ -89,7 +92,7 @@ class OrderTravelStoreRequestTest extends TestCase
             'departureDateIsAfterToday' => [
                 'departure_date',
                 Carbon::now()->subDay()->format('Y-m-d H:i:s'),
-                'O campo departure date deve conter uma data posterior a today.'
+                'O campo departure date deve conter uma data superior ou igual a today.'
             ],
             'returnDateIsNull' => ['return_date', null, 'O campo return date é obrigatório.'],
             'returnDateIsInvalid' => [
