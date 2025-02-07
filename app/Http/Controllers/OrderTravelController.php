@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\OrderTravelCanceledException;
 use App\Http\Requests\Travel\OrderTravelIndexRequest;
 use App\Http\Requests\Travel\OrderTravelShowRequest;
 use App\Http\Requests\Travel\OrderTravelStoreRequest;
@@ -114,7 +115,7 @@ class OrderTravelController extends Controller
             return response()->json($this->travelService->getTravelsWithFilters($filters));
 
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json(['error' => $exception->getMessage()]);
         }
     }
 
@@ -180,7 +181,7 @@ class OrderTravelController extends Controller
             ], Response::HTTP_CREATED);
 
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json(['error' => $exception->getMessage()]);
         }
     }
 
@@ -237,6 +238,14 @@ class OrderTravelController extends Controller
      *               @OA\Property(property="message", type="string", example="Você não tem permissão para realizar esta ação.")
      *           )
      *       ),
+     *       @OA\Response(
+     *            response=400,
+     *            description="O pedido excedeu o prazo de 24 horas para aprovação e, por isso, não pode ser cancelado.",
+     *            @OA\JsonContent(
+     *                type="object",
+     *                 @OA\Property(property="error", type="string", example="O pedido excedeu o prazo de 24 horas para aprovação e, por isso, não pode ser cancelado.")
+     *              ),
+     *            ),
      *      @OA\Response(
      *           response=422,
      *           description="Solicitação inválida - dados fornecidos não são válidos.",
@@ -275,8 +284,10 @@ class OrderTravelController extends Controller
                 'message' => "Status do pedido alterado com sucesso.",
                 'data' => $this->travelService->updateTravelStatus($request->validated())
             ]);
+        } catch (OrderTravelCanceledException $exception) {
+            return response()->json(['error' => $exception->getMessage()], $exception->getCode());
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json(['error' => $exception->getMessage()]);
         }
     }
 
@@ -346,7 +357,7 @@ class OrderTravelController extends Controller
             ]);
 
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json(['error' => $exception->getMessage()]);
         }
     }
 }

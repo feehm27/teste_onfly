@@ -2,12 +2,18 @@
 
 namespace App\Services;
 
+use App\Exceptions\OrderTravelCanceledException;
 use App\Models\OrderTravel;
 use App\Repositories\Contracts\OrderTravelRepositoryInterface;
+use Carbon\Carbon;
 use Exception;
+use Symfony\Component\HttpFoundation\Response;
 
 class OrderTravelService
 {
+    public const APPROVED_STATUS = 2;
+    public const CANCELED_STATUS = 3;
+
     public function __construct(protected OrderTravelRepositoryInterface $travelRepository)
     {
     }
@@ -27,28 +33,6 @@ class OrderTravelService
         } else {
             return $this->travelRepository->get();
         }
-    }
-
-    public function createTravel(array $inputs)
-    {
-        //TODO
-        //Obter identificador do usuario apos autenticação
-        $inputs['user_id'] = 1;
-        return $this->travelRepository->create($inputs);
-    }
-
-    public function updateTravelStatus(array $inputs): OrderTravel
-    {
-        $orderTravelId = $inputs['id'];
-        $params = [
-            'order_travel_status_id' => $inputs['order_travel_status_id']
-        ];
-
-        $updateSuccessful = $this->travelRepository->updateById($orderTravelId, $params);
-
-        return $updateSuccessful
-            ? $this->travelRepository->find($orderTravelId)
-            : throw new Exception('Não foi possível atualizar o status da viagem. Por favor, entre em contato com o suporte.');
     }
 
     private function applyFilters(object $filters): void
@@ -81,6 +65,46 @@ class OrderTravelService
 
         if (!$hasDepartureDate && $hasReturnDate) {
             $this->travelRepository->where('return_date', $filters->return_date, '<');
+        }
+    }
+
+    public function createTravel(array $inputs)
+    {
+        //TODO
+        //Obter identificador do usuario apos autenticação
+        $inputs['user_id'] = 1;
+        return $this->travelRepository->create($inputs);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function updateTravelStatus(array $inputs): OrderTravel
+    {
+        $orderTravel = $this->travelRepository->find($inputs['id']);
+        $orderTravelStatusId = $inputs['order_travel_status_id'];
+
+        $this->checkIfCanBeCancelled($orderTravelStatusId, $orderTravel);
+
+        $orderTravel->order_travel_status_id = $orderTravelStatusId;
+        $orderTravel->save();
+
+        return $orderTravel;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function checkIfCanBeCancelled(int $orderTravelStatusId, OrderTravel $orderTravel): void
+    {
+        if ($orderTravelStatusId == self::CANCELED_STATUS && $orderTravel->order_travel_status_id == self::APPROVED_STATUS) {
+
+            $providedDate = Carbon::parse($orderTravel->updated_at);
+            $currentDate = Carbon::now();
+
+            if ($providedDate->diffInHours($currentDate) > 24) {
+                throw new OrderTravelCanceledException(Response::HTTP_BAD_REQUEST);
+            }
         }
     }
 }

@@ -510,6 +510,22 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "O pedido excedeu o prazo de 24 horas para aprovação e, por isso, não pode ser cancelado.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "O pedido excedeu o prazo de 24 horas para aprovação e, por isso, não pode ser cancelado."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Solicitação inválida - dados fornecidos não são válidos.",
                         "content": {
