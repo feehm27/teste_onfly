@@ -11,7 +11,6 @@ class OrderTravel extends Model
     use HasFactory;
 
     protected $table = 'order_travels';
-
     protected $hidden = ['created_at', 'updated_at'];
 
     protected $fillable = [
@@ -26,7 +25,7 @@ class OrderTravel extends Model
 
     public function status(): HasOne
     {
-        return $this->hasOne(OrderTravelStatus::class, 'travel_status_id');
+        return $this->hasOne(OrderTravelStatus::class, 'id','order_travel_status_id');
     }
 
     public function user()
