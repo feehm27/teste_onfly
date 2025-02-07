@@ -1,66 +1,150 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Teste Técnico Onfly
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Este projeto foi criado utilizando o [Laravel Sail](https://laravel.com/docs/11.x/sail) e o  [Laravel 11](https://laravel.com/docs/11.x) para implementação de um microserviço de Pedido de Viagens.
+Segue abaixo as instruções de instalação.
 
-## About Laravel
+## Requisitos
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Antes de começar, você precisa ter o seguinte instalado:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- [Docker](https://www.docker.com/get-started)
+- [Docker Compose](https://docs.docker.com/compose/)
+- [Git](https://git-scm.com/)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Instalando o Projeto
 
-## Learning Laravel
+Siga os passos abaixo para instalar o projeto:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1. **Clone o repositório:**
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+    ```bash
+    git clone https://github.com/feehm27/teste_onfly.git
+    cd teste_onfly
+    ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+2. **Instale as dependências do Laravel:**
 
-## Laravel Sponsors
+   Instale as dependências do Laravel Sail com o seguinte comando:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+    ```bash
+    ./vendor/bin/sail up -d
+    ```
 
-### Premium Partners
+   Isso irá inicializar o ambiente Docker.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+4. **Configure o ambiente:**
 
-## Contributing
+   Copie o arquivo `.env.example` para um novo arquivo `.env`:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+    ```bash
+    cp .env.example .env
+    ```
 
-## Code of Conduct
+   Em seguida, gere a chave da aplicação:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+    ```bash
+    ./vendor/bin/sail artisan key:generate
+    ```
 
-## Security Vulnerabilities
+   Abra o arquivo `.env` e adicione ou atualize as seguintes variáveis para configurar a conexão com o banco de dados:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+    ```env
+    DB_CONNECTION=mysql
+    DB_HOST=mysql
+    DB_PORT=3306
+    DB_DATABASE=laravel
+    DB_USERNAME=sail
+    DB_PASSWORD=password
+    ```
 
-## License
+   Essas configurações são específicas para o ambiente Laravel Sail, onde o banco de dados MySQL está rodando dentro de um contêiner Docker. Caso o nome do banco de dados ou as credenciais sejam diferentes, ajuste as configurações conforme necessário.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+5. **Prepare o banco de dados executando as migrações e os seeders:**
+
+   Para rodar tanto as migrações quanto os seeders ao mesmo tempo, use o seguinte comando:
+
+    ```bash
+    ./vendor/bin/sail artisan migrate --seed
+    ```
+
+6. **Acesse o aplicativo:**
+
+   Após seguir os passos acima, você pode acessar a aplicação no navegador em:
+
+    ```
+    http://localhost
+    ```
+
+   Você será redirecionado automaticamente para a página da documentação.
+
+## Executando os Testes
+
+1. **Executar os testes unitários:**
+
+   Laravel Sail já configura o PHPUnit para você. Para rodar os testes, execute o seguinte comando:
+
+    ```bash
+    ./vendor/bin/sail test
+    ```
+
+   Isso irá rodar todos os testes definidos na pasta `tests/`.
+
+2. **Executar testes de integração específicos:**
+
+   Você pode especificar o nome de um arquivo de teste específico para rodá-lo. Por exemplo:
+
+    ```bash
+    ./vendor/bin/sail test --filter=OrderTravelControllerSuccessTest
+    ```
+
+3. **Ver o resultado dos testes:**
+
+   Após a execução dos testes, o PHPUnit irá exibir o resultado diretamente no terminal.
+
+## Autenticação
+
+Este projeto inclui funcionalidades de autenticação, permitindo o registro e o login de usuários através de endpoints de API. Para testar e utilizar esses endpoints, siga as instruções abaixo.
+
+### Endpoints de Autenticação
+
+1. **Registrar um novo usuário (Register)**
+
+   O endpoint para registrar um novo usuário é `POST /api/v1/register`. Você deve enviar os dados do usuário no corpo da requisição conforme documentação.
+   Se o registro for bem-sucedido, você receberá uma resposta com os dados do usuário e um token de autenticação.
+   Esse token pode ser usado para autenticar requisições em endpoints protegidos.
+
+   **Resposta Esperada:**
+
+    ```json
+    {
+        "user": {
+            "id": 1,
+            "name": "Nome do Usuário",
+            "email": "usuario@exemplo.com"
+        },
+        "token": "token_de_autenticacao_aqui"
+    }
+    ```
+
+
+3. **Login de um usuário (Login)**
+
+   O endpoint para realizar o login de um usuário é `POST /api/v1/login`. Você deve enviar o e-mail e a senha do usuário no corpo da requisição.
+   Esse token será necessário para autenticar suas requisições em endpoints que requerem autenticação.
+
+   **Resposta Esperada:**
+
+   Se o login for bem-sucedido, você receberá um token de autenticação.
+
+    ```json
+    {
+        "token": "token_de_autenticacao_aqui"
+    }
+    ```
+
+## Parando o Ambiente Docker
+
+Para parar o ambiente Docker, execute o comando:
+
+```bash
+./vendor/bin/sail down
