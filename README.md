@@ -1,150 +1,71 @@
+
 # Teste Técnico Onfly
 
-Este projeto foi criado utilizando o [Laravel Sail](https://laravel.com/docs/11.x/sail) e o  [Laravel 11](https://laravel.com/docs/11.x) para implementação de um microserviço de Pedido de Viagens.
-Segue abaixo as instruções de instalação.
+Microserviço de pedido de viagens com operações de cadastro, atualização, visualização e listagem.
 
-## Requisitos
+**Conteúdo**
 
-Antes de começar, você precisa ter o seguinte instalado:
+- [Dependências globais](#dependências-globais)
+- [Instalação do Projeto](#instalação-do-projeto)
+- [Geração de token para autenticação](#geração-de-token-para-autenticação)
+    - [Criar um novo usuário](#criar-um-novo-usuário)
+    - [Obter token de usuário cadastrado](#obter-token-de-usuário-cadastrado)
+- [Execução dos Testes](#execução-dos-testes)
+
+### Dependências globais
+
+Você precisa ter três principais dependências instaladas:
 
 - [Docker](https://www.docker.com/get-started)
 - [Docker Compose](https://docs.docker.com/compose/)
 - [Git](https://git-scm.com/)
 
-## Instalando o Projeto
+## Instalação do Projeto
 
-Siga os passos abaixo para instalar o projeto:
+Para instalação do projeto é necessário seguir as seguintes orientações:
 
-1. **Clone o repositório:**
+1. Clonar o projeto: https://github.com/feehm27/teste_onfly.git
+2. Navegar até a pasta do projeto: ``` cd teste_onfly ```
+3. Rodar os comandos do docker: ```docker-compose build && docker-compose up -d```
+4. Criar o arquivo .env ``` cp .env.example .env ```
+5. Acessar o container e instalar as dependências do projeto: ``` composer install ```
+6. Executar as migrations: ``` php artisan migrate ```
+7. Executar as seeders: ``` php artisan db:seed ```
+8. Navegar até o http://localhost para acessar a documentação da API
 
-    ```bash
-    git clone https://github.com/feehm27/teste_onfly.git
-    cd teste_onfly
-    ```
+### Geração de token para autenticação
 
-2. **Instale as dependências do Laravel:**
+No ambiente de desenvolvimento você poderá criar usuários manualmente para conseguir autenticar na rotas que tem proteção.
 
-   Instale as dependências do Laravel Sail com o seguinte comando:
+#### Criar um novo usuário
 
-    ```bash
-    ./vendor/bin/sail up -d
-    ```
+1. Após subir os serviços, acesse o localhost (http://localhost)
+2. Acesse o endpoint http://localhost/api/v1/register
+3. Preencha os dados e utilize **qualquer email** com formato válido, mesmo que este email não exista, por exemplo: `teste@teste.com`
+4. O backend irá retornar os dados do usuário juntamente com o campo `token`.
+5. Copie o campo token e utilize nas apis que tem proteção de autenticação no formato **Bearer** `token`.
 
-   Isso irá inicializar o ambiente Docker.
+#### Obter token de usuário cadastrado
+1. Após subir os serviços, acesse o localhost(http://localhost)
+2. Acesse o endpoint http://localhost/api/v1/login
+3. Preencha os dados de um usuário que foi cadastrado posteriormente.
+4. O backend irá retornar os dados do usuário juntamente com o campo `token`.
+5. Copie o campo token e utilize nas apis que tem proteção de autenticação no formato **Bearer** `token`.
 
-4. **Configure o ambiente:**
+### Execução dos testes
 
-   Copie o arquivo `.env.example` para um novo arquivo `.env`:
+Para execução dos testes é necessário seguir as seguintes orientações:
 
-    ```bash
-    cp .env.example .env
-    ```
+1. Configurar um arquivo .env.testing, 
+2. Executar as migrations:``` php artisan migrate ```
+3. Executar as seeders:``` php artisan db:seed ```
+4. Executar o comando: ``` php artisan test ```
 
-   Em seguida, gere a chave da aplicação:
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-    ```bash
-    ./vendor/bin/sail artisan key:generate
-    ```
-
-   Abra o arquivo `.env` e adicione ou atualize as seguintes variáveis para configurar a conexão com o banco de dados:
-
-    ```env
-    DB_CONNECTION=mysql
-    DB_HOST=mysql
-    DB_PORT=3306
-    DB_DATABASE=laravel
-    DB_USERNAME=sail
-    DB_PASSWORD=password
-    ```
-
-   Essas configurações são específicas para o ambiente Laravel Sail, onde o banco de dados MySQL está rodando dentro de um contêiner Docker. Caso o nome do banco de dados ou as credenciais sejam diferentes, ajuste as configurações conforme necessário.
-
-5. **Prepare o banco de dados executando as migrações e os seeders:**
-
-   Para rodar tanto as migrações quanto os seeders ao mesmo tempo, use o seguinte comando:
-
-    ```bash
-    ./vendor/bin/sail artisan migrate --seed
-    ```
-
-6. **Acesse o aplicativo:**
-
-   Após seguir os passos acima, você pode acessar a aplicação no navegador em:
-
-    ```
-    http://localhost
-    ```
-
-   Você será redirecionado automaticamente para a página da documentação.
-
-## Executando os Testes
-
-1. **Executar os testes unitários:**
-
-   Laravel Sail já configura o PHPUnit para você. Para rodar os testes, execute o seguinte comando:
-
-    ```bash
-    ./vendor/bin/sail test
-    ```
-
-   Isso irá rodar todos os testes definidos na pasta `tests/`.
-
-2. **Executar testes de integração específicos:**
-
-   Você pode especificar o nome de um arquivo de teste específico para rodá-lo. Por exemplo:
-
-    ```bash
-    ./vendor/bin/sail test --filter=OrderTravelControllerSuccessTest
-    ```
-
-3. **Ver o resultado dos testes:**
-
-   Após a execução dos testes, o PHPUnit irá exibir o resultado diretamente no terminal.
-
-## Autenticação
-
-Este projeto inclui funcionalidades de autenticação, permitindo o registro e o login de usuários através de endpoints de API. Para testar e utilizar esses endpoints, siga as instruções abaixo.
-
-### Endpoints de Autenticação
-
-1. **Registrar um novo usuário (Register)**
-
-   O endpoint para registrar um novo usuário é `POST /api/v1/register`. Você deve enviar os dados do usuário no corpo da requisição conforme documentação.
-   Se o registro for bem-sucedido, você receberá uma resposta com os dados do usuário e um token de autenticação.
-   Esse token pode ser usado para autenticar requisições em endpoints protegidos.
-
-   **Resposta Esperada:**
-
-    ```json
-    {
-        "user": {
-            "id": 1,
-            "name": "Nome do Usuário",
-            "email": "usuario@exemplo.com"
-        },
-        "token": "token_de_autenticacao_aqui"
-    }
-    ```
-
-
-3. **Login de um usuário (Login)**
-
-   O endpoint para realizar o login de um usuário é `POST /api/v1/login`. Você deve enviar o e-mail e a senha do usuário no corpo da requisição.
-   Esse token será necessário para autenticar suas requisições em endpoints que requerem autenticação.
-
-   **Resposta Esperada:**
-
-   Se o login for bem-sucedido, você receberá um token de autenticação.
-
-    ```json
-    {
-        "token": "token_de_autenticacao_aqui"
-    }
-    ```
-
-## Parando o Ambiente Docker
-
-Para parar o ambiente Docker, execute o comando:
-
-```bash
-./vendor/bin/sail down
+<p align="center">
+<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+</p>
