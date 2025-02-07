@@ -235,10 +235,10 @@ class OrderTravelController extends Controller
      *       ),
      *      @OA\Response(
      *           response=403,
-     *           description="Ação não permitida para o usuário.",
+     *           description="Você não tem permissão para editar essa solicitação de viagem.",
      *           @OA\JsonContent(
      *               type="object",
-     *               @OA\Property(property="message", type="string", example="Você não tem permissão para realizar esta ação.")
+     *               @OA\Property(property="message", type="string", example="Você não tem permissão para editar essa solicitação de viagem.")
      *           )
      *       ),
      *       @OA\Response(
@@ -328,10 +328,10 @@ class OrderTravelController extends Controller
      *        ),
      *       @OA\Response(
      *            response=403,
-     *            description="Ação não permitida para o usuário.",
+     *            description="Você não tem permissão para visualizar essa solicitação de viagem.",
      *            @OA\JsonContent(
      *                type="object",
-     *                @OA\Property(property="message", type="string", example="Você não tem permissão para realizar esta ação.")
+     *                @OA\Property(property="message", type="string", example="Você não tem permissão para visualizar essa solicitação de viagem.")
      *            )
      *        ),
      *       @OA\Response(

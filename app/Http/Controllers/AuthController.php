@@ -20,10 +20,10 @@ class AuthController extends Controller
      *      required=true,
      *      @OA\JsonContent(
      *          required={"name", "email", "password"},
-     *          @OA\Property(property="name", type="string", example="João da Silva"),
-     *          @OA\Property(property="email", type="string", example="usuario@example.com"),
-     *          @OA\Property(property="password", type="string", example="senha_do_usuario"),
-     *          @OA\Property(property="password_confirmation", type="string", example="senha_do_usuario")
+     *          @OA\Property(property="name", type="string", example="Frederico Ribeiro"),
+     *          @OA\Property(property="email", type="string", example="fred@gmail.com.br"),
+     *          @OA\Property(property="password", type="string", example="Fred@1254"),
+     *          @OA\Property(property="password_confirmation", type="string", example="Fred@1254")
      *      )
      *  ),
      *  @OA\Response(
@@ -33,8 +33,8 @@ class AuthController extends Controller
      *          type="object",
      *          @OA\Property(property="user", type="object",
      *              @OA\Property(property="id", type="integer", example=1),
-     *              @OA\Property(property="name", type="string", example="João da Silva"),
-     *              @OA\Property(property="email", type="string", example="usuario@example.com")
+     *              @OA\Property(property="name", type="string", example="Frederico Ribeiro"),
+     *              @OA\Property(property="email", type="string", example="fred@gmail.com.br")
      *          ),
      *          @OA\Property(property="token", type="string", example="token_gerado_aqui")
      *      )
@@ -92,8 +92,8 @@ class AuthController extends Controller
      *      required=true,
      *      @OA\JsonContent(
      *          required={"email", "password"},
-     *          @OA\Property(property="email", type="string", example="usuario@example.com"),
-     *          @OA\Property(property="password", type="string", example="senha_do_usuario")
+     *          @OA\Property(property="email", type="string", example="fred@gmail.com.br"),
+     *          @OA\Property(property="password", type="string", example="Fred@1254")
      *      )
      *  ),
      *  @OA\Response(

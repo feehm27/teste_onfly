@@ -29,7 +29,7 @@ class OrderTravelUpdateRequest extends FormRequest
             throw new OrderTravelNotFoundException();
         }
 
-        if (!$this->user()->can('permission', $orderTravel)) {
+        if ($this->user()->can('permission', $orderTravel)) {
             throw new UnauthorizedException(true);
         }
 

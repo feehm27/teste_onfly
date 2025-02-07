@@ -35,19 +35,19 @@
                                 "properties": {
                                     "name": {
                                         "type": "string",
-                                        "example": "João da Silva"
+                                        "example": "Frederico Ribeiro"
                                     },
                                     "email": {
                                         "type": "string",
-                                        "example": "usuario@example.com"
+                                        "example": "fred@gmail.com.br"
                                     },
                                     "password": {
                                         "type": "string",
-                                        "example": "senha_do_usuario"
+                                        "example": "Fred@1254"
                                     },
                                     "password_confirmation": {
                                         "type": "string",
-                                        "example": "senha_do_usuario"
+                                        "example": "Fred@1254"
                                     }
                                 },
                                 "type": "object"
@@ -70,11 +70,11 @@
                                                 },
                                                 "name": {
                                                     "type": "string",
-                                                    "example": "João da Silva"
+                                                    "example": "Frederico Ribeiro"
                                                 },
                                                 "email": {
                                                     "type": "string",
-                                                    "example": "usuario@example.com"
+                                                    "example": "fred@gmail.com.br"
                                                 }
                                             },
                                             "type": "object"
@@ -160,11 +160,11 @@
                                 "properties": {
                                     "email": {
                                         "type": "string",
-                                        "example": "usuario@example.com"
+                                        "example": "fred@gmail.com.br"
                                     },
                                     "password": {
                                         "type": "string",
-                                        "example": "senha_do_usuario"
+                                        "example": "Fred@1254"
                                     }
                                 },
                                 "type": "object"
@@ -597,14 +597,14 @@
                         }
                     },
                     "403": {
-                        "description": "Ação não permitida para o usuário.",
+                        "description": "Você não tem permissão para visualizar essa solicitação de viagem.",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "Você não tem permissão para realizar esta ação."
+                                            "example": "Você não tem permissão para visualizar essa solicitação de viagem."
                                         }
                                     },
                                     "type": "object"
@@ -739,14 +739,14 @@
                         }
                     },
                     "403": {
-                        "description": "Ação não permitida para o usuário.",
+                        "description": "Você não tem permissão para editar essa solicitação de viagem.",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "Você não tem permissão para realizar esta ação."
+                                            "example": "Você não tem permissão para editar essa solicitação de viagem."
                                         }
                                     },
                                     "type": "object"
