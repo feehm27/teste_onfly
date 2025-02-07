@@ -6,6 +6,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -87,9 +88,29 @@ class OrderTravelStoreRequest extends FormRequest
         return [
             'name_applicant' => ['required','string'],
             'destination' => ['required','string'],
-            'departure_date' => ['required','date_format:Y-m-d H:i:s','after:today'],
+            'departure_date' => ['required','date_format:Y-m-d H:i:s','after_or_equal:today'],
             'return_date' => ['required', 'date_format:Y-m-d H:i:s', 'after:departure_date'],
+            'user_id' => ['required','integer','exists:users,id'],
         ];
+    }
+
+    public function messages()
+    {
+        return [
+            'departure_date.after_or_equal' => 'O campo :attribute deve conter uma data posterior a data/horário atual.',
+        ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'user_id' => Auth::user()->id
+        ]);
     }
 
     /**

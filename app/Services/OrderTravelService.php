@@ -70,9 +70,6 @@ class OrderTravelService
 
     public function createTravel(array $inputs)
     {
-        //TODO
-        //Obter identificador do usuario apos autenticação
-        $inputs['user_id'] = 1;
         return $this->travelRepository->create($inputs);
     }
 
