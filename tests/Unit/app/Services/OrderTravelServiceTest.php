@@ -5,7 +5,7 @@ namespace Tests\Unit\app\Services;
 use App\Exceptions\CancellationNotAllowedException;
 use App\Models\OrderTravel;
 use App\Models\User;
-use App\Notifications\OrderTravelUpdated;
+use App\Notifications\OrderTravelUpdatedNotification;
 use App\Repositories\Contracts\OrderTravelRepositoryInterface;
 use App\Services\OrderTravelService;
 use Carbon\Carbon;
@@ -144,7 +144,7 @@ class OrderTravelServiceTest extends TestCase
 
         $user->shouldReceive('notify')
             ->once()
-            ->with(Mockery::type(OrderTravelUpdated::class))
+            ->with(Mockery::type(OrderTravelUpdatedNotification::class))
             ->andReturn(true);
 
         $updatedOrderTravel = $this->orderTravelService->updateTravelStatus($inputs);
@@ -198,7 +198,7 @@ class OrderTravelServiceTest extends TestCase
 
         $user->shouldReceive('notify')
             ->once()
-            ->with(Mockery::type(OrderTravelUpdated::class))
+            ->with(Mockery::type(OrderTravelUpdatedNotification::class))
             ->andReturn(true);
 
         $updatedOrderTravel = $this->orderTravelService->updateTravelStatus($inputs);

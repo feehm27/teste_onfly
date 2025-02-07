@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Exceptions\CancellationNotAllowedException;
 use App\Models\OrderTravel;
-use App\Notifications\OrderTravelUpdated;
+use App\Notifications\OrderTravelUpdatedNotification;
 use App\Repositories\Contracts\OrderTravelRepositoryInterface;
 use Carbon\Carbon;
 use Exception;
@@ -86,7 +86,7 @@ class OrderTravelService
         $orderTravel->order_travel_status_id = $inputs->order_travel_status_id;
         $orderTravel->save();
 
-        auth()->user()->notify(new OrderTravelUpdated($orderTravel));
+        auth()->user()->notify(new OrderTravelUpdatedNotification($orderTravel));
 
         return $orderTravel;
     }
