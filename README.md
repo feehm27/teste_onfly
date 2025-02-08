@@ -28,10 +28,11 @@ Para instalação do projeto é necessário seguir as seguintes orientações:
 2. Navegar até a pasta do projeto: ``` cd teste_onfly ```
 3. Rodar os comandos do docker: ```docker-compose build && docker-compose up -d```
 4. Criar o arquivo .env ``` cp .env.example .env ```
-5. Acessar o container e instalar as dependências do projeto: ``` composer install ```
-6. Executar as migrations: ``` php artisan migrate ```
-7. Executar as seeders: ``` php artisan db:seed ```
-8. Navegar até o http://localhost para acessar a documentação da API
+6. Acessar o container e instalar as dependências do projeto: ``` composer install ```
+7. Gerar chave do projeto: ``` php artisan key:generate ```
+8. Executar as migrations: ```php artisan migrate ```
+9. Executar as seeders: ``` php artisan db:seed ```
+10. Navegar até o http://localhost para acessar a documentação da API
 
 ### Geração de token para autenticação
 
@@ -56,7 +57,7 @@ No ambiente de desenvolvimento você poderá criar usuários manualmente para co
 
 Para execução dos testes é necessário seguir as seguintes orientações:
 
-1. Configurar um arquivo .env.testing, 
+1. Configurar um arquivo .env.testing,
 2. Executar as migrations:``` php artisan migrate ```
 3. Executar as seeders:``` php artisan db:seed ```
 4. Executar o comando: ``` php artisan test ```
